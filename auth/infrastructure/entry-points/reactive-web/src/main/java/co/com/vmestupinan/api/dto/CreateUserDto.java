@@ -3,10 +3,12 @@ package co.com.vmestupinan.api.dto;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+@Schema(description = "DTO para la creación de un usuario")
 public record CreateUserDto(
         @NotBlank(message = "El nombre es requerido")
         String name,
@@ -20,6 +22,7 @@ public record CreateUserDto(
         String address,
         @NotBlank(message = "El número de teléfono es requerido")
         String phone,
+        @Schema(description = "Correo electrónico del usuario", example = "test@mail.com")
         @NotBlank(message = "El correo electrónico es requerido")
         @Email(message = "El correo electrónico no es válido")
         String email,

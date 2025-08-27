@@ -18,16 +18,16 @@ import reactor.core.publisher.Mono;
 
 @Component
 @RequiredArgsConstructor
-public class UserHandlerV1 {
+public class HandlerV1 {
 
     private final UserUseCase userUseCase;
     private final UserMapper userMapper;
 
     //@PreAuthorize("hasRole('permissionGET')")
-    public Mono<ServerResponse> saveUser(ServerRequest serverRequest) {
+    public Mono<ServerResponse> createUser(ServerRequest serverRequest) {
         return serverRequest.bodyToMono(CreateUserDto.class)
                 .doOnNext(ValidationUtils::validate)
-                .map(userMapper::toDomain)
+                .map(userMapper::toModel)
                 .flatMap(userUseCase::create)
                 .flatMap(user -> ServerResponse
                 .status(HttpStatus.CREATED)
@@ -46,13 +46,13 @@ public class UserHandlerV1 {
                 );
     }
 
-    //@PreAuthorize("hasRole('permissionGETOther')")
+    // @PreAuthorize("hasRole('permissionGETOther')")
     public Mono<ServerResponse> listenGETOtherUseCase(ServerRequest serverRequest) {
         // useCase2.logic();
         return ServerResponse.ok().bodyValue("");
     }
 
-    //@PreAuthorize("hasRole('permissionPOST')")
+    // @PreAuthorize("hasRole('permissionPOST')")
     public Mono<ServerResponse> listenPOSTUseCase(ServerRequest serverRequest) {
         // useCase.logic();
         return ServerResponse.ok().bodyValue("");
