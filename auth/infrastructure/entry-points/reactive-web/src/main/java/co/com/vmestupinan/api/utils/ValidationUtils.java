@@ -1,8 +1,10 @@
 package co.com.vmestupinan.api.utils;
 
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import co.com.vmestupinan.api.exception.ValidationException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -14,10 +16,12 @@ public class ValidationUtils {
     public static <T> void validate(T object) {
         Set<ConstraintViolation<T>> violations = validator.validate(object);
         if (!violations.isEmpty()) {
-            String message = violations.stream()
-                    .map(ConstraintViolation::getMessage)
-                    .collect(Collectors.joining(", "));
-            throw new IllegalArgumentException(message);
+            Map<String, String> fieldErrors = violations.stream()
+                    .collect(Collectors.toMap(
+                            v -> v.getPropertyPath().toString(),
+                            ConstraintViolation::getMessage
+                    ));
+            throw new ValidationException(fieldErrors);
         }
     }
 }
