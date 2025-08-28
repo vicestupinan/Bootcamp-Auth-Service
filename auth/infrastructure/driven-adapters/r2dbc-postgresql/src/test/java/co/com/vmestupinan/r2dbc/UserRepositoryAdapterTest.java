@@ -4,18 +4,15 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.reactivecommons.utils.ObjectMapper;
 
-import co.com.vmestupinan.model.user.User;
-import co.com.vmestupinan.r2dbc.entity.UserEntity;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 @ExtendWith(MockitoExtension.class)
-class MyReactiveRepositoryAdapterTest {
+class UserRepositoryAdapterTest {
 
     @InjectMocks
     UserReactiveRepositoryAdapter repositoryAdapter;
@@ -25,12 +22,14 @@ class MyReactiveRepositoryAdapterTest {
     ObjectMapper mapper;
 
     @Test
-    void mustFindValueById() {
-        when(repository.findById(1L)).thenReturn(Mono.just(mock(UserEntity.class)));
-        when(mapper.map(mock(UserEntity.class), User.class)).thenReturn(mock(User.class));
-        Mono<User> result = repositoryAdapter.findById(1L);
+    void mustFindValueByEmail() {
+        when(repository.existsByEmail("test@example.com"))
+                .thenReturn(Mono.just(true));
+
+        Mono<Boolean> result = repositoryAdapter.existsByEmail("test@example.com");
+
         StepVerifier.create(result)
-                .expectNextMatches(value -> value.equals(mock(User.class)))
+                .expectNext(true)
                 .verifyComplete();
     }
 }
