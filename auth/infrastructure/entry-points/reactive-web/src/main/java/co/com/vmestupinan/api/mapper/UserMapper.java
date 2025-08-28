@@ -10,6 +10,6 @@ import co.com.vmestupinan.model.user.User;
 public interface UserMapper {
 
     @Mapping(target = "id", ignore = true)
-    User toDomain(CreateUserDto dto);
+    User toModel(CreateUserDto dto);
 
 }
