@@ -38,7 +38,6 @@ public class Router {
                 @ApiResponse(responseCode = "201", description = "Usuario creado",
                     content = @Content(schema = @Schema(implementation = CreateUserDto.class))),
                 @ApiResponse(responseCode = "400", description = "Datos inválidos"),
-                @ApiResponse(responseCode = "409", description = "Conflicto de negocio")
             }
         )
     )
