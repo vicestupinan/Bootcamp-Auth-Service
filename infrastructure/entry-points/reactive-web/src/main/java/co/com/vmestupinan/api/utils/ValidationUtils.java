@@ -8,12 +8,13 @@ import co.com.vmestupinan.api.exception.ValidationException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
+import reactor.core.publisher.Mono;
 
 public class ValidationUtils {
 
     private static final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
-    public static <T> void validate(T object) {
+    public static <T> Mono<T> validate(T object) {
         Set<ConstraintViolation<T>> violations = validator.validate(object);
         if (!violations.isEmpty()) {
             Map<String, String> fieldErrors = violations.stream()
@@ -21,7 +22,8 @@ public class ValidationUtils {
                             v -> v.getPropertyPath().toString(),
                             ConstraintViolation::getMessage
                     ));
-            throw new ValidationException(fieldErrors);
+            return Mono.error(new ValidationException(fieldErrors));
         }
+        return Mono.just(object);
     }
 }
