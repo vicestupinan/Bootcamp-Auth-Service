@@ -14,7 +14,7 @@ public class CreateUserUseCase {
 
     private final UserRepository userRepository;
 
-    public Mono<User> execute(User user) {
+    public Mono<Void> execute(User user) {
         return userRepository.existsByEmail(user.getEmail())
                 .flatMap(exists -> {
                     if (exists) {
@@ -24,7 +24,7 @@ public class CreateUserUseCase {
                             || user.getBaseSalary().compareTo(new BigDecimal("15000000")) > 0) {
                         return Mono.error(new InvalidSalaryException("El salario base debe estar entre 0 y 15,000,000"));
                     }
-                    return userRepository.save(user);
+                    return userRepository.save(user).then();
                 });
     }
 }

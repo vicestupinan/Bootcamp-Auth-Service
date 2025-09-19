@@ -25,9 +25,9 @@ public class HandlerV1 {
                 .doOnNext(ValidationUtils::validate)
                 .map(userMapper::toModel)
                 .flatMap(userUseCase::execute)
-                .flatMap(user -> ServerResponse
-                    .status(HttpStatus.CREATED)
-                    .build()
+                .then(ServerResponse
+                        .status(HttpStatus.CREATED)
+                        .build()
                 );
     }
 }

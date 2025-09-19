@@ -53,7 +53,6 @@ public class CreateUserUseCaseTest {
         when(userRepository.save(user)).thenReturn(Mono.just(user));
 
         StepVerifier.create(createUserUseCase.execute(user))
-                .expectNext(user)
                 .verifyComplete();
 
         verify(userRepository).existsByEmail(user.getEmail());
